@@ -1,0 +1,98 @@
+%% Load data
+data = readtable('abalone.csv');
+
+%% Encode 'sex'
+data.sex = categorical(data.sex);
+sex_dummy = dummyvar(data.sex);
+data.sex = [];
+
+%% Extract numerical features
+numData = table2array(data(:,1:end-1)); % exclude 'rings'
+y = data.rings;
+
+%% ---- Feature Engineering ----
+length_ = numData(:,1);
+diameter = numData(:,2);
+height = numData(:,3);
+whole_w = numData(:,4);
+shucked_w = numData(:,5);
+viscera_w = numData(:,6);
+shell_w = numData(:,7);
+
+% Ratios and interactions
+ratio1 = shucked_w ./ (whole_w + eps);
+ratio2 = length_ ./ (diameter + eps);
+density = whole_w ./ (length_ .* diameter .* height + eps);
+
+% Combine all features
+X = [sex_dummy, numData, ratio1, ratio2, density];
+
+%% Train/test split
+cv = cvpartition(length(y), 'HoldOut', 0.2);
+
+X_train = X(training(cv), :);
+y_train = y(training(cv));
+
+X_test = X(test(cv), :);
+y_test = y(test(cv));
+
+%% ---- Train Improved Random Forest ----
+rfModel = TreeBagger(300, X_train, y_train, ...
+    'Method', 'regression', ...
+    'MinLeafSize', 5, ...
+    'OOBPrediction', 'On', ...
+    'OOBPredictorImportance', 'On');
+
+%% Predict
+y_pred = predict(rfModel, X_test);
+
+%% ---- Primary Metrics ----
+rmse = sqrt(mean((y_test - y_pred).^2));
+mae = mean(abs(y_test - y_pred));
+
+fprintf('RMSE: %.4f\n', rmse);
+fprintf('MAE: %.4f\n', mae);
+
+%% ---- Create Bins (based ONLY on training data) ----
+q1 = quantile(y_train, 1/3);
+q2 = quantile(y_train, 2/3);
+
+bin_func = @(v) ...
+    (v <= q1) .* 1 + ...
+    (v > q1 & v <= q2) .* 2 + ...
+    (v > q2) .* 3;
+
+y_test_class = bin_func(y_test);
+y_pred_class = bin_func(y_pred);
+
+%% ---- Confusion Matrix ----
+confMat = confusionmat(y_test_class, y_pred_class);
+
+disp('Confusion Matrix (rows=actual, cols=predicted)');
+disp(confMat);
+
+accuracy = sum(diag(confMat)) / sum(confMat(:));
+fprintf('Classification Accuracy: %.4f\n', accuracy);
+
+%% ---- Plot Confusion Matrix (Ordered: Young, Mid, Old) ----
+figure;
+cmChart = confusionchart(confMat, {'Young','Mid','Old'});
+cmChart.Title = 'Age Group Confusion Matrix';
+cmChart.RowSummary = 'row-normalized';
+cmChart.ColumnSummary = 'column-normalized';
+
+%% ---- Scatter Plot (Regression Quality) ----
+figure;
+scatter(y_test, y_pred, 'filled');
+xlabel('Actual Rings');
+ylabel('Predicted Rings');
+title('Predicted vs Actual (Random Forest)');
+grid on;
+refline(1,0); % ideal line
+
+%% ---- Feature Importance ----
+figure;
+bar(rfModel.OOBPermutedPredictorDeltaError);
+title('Feature Importance');
+xlabel('Feature Index');
+ylabel('Importance');
