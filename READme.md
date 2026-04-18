@@ -27,7 +27,7 @@ our data.
 
 ![Figure_1](Confusion_Matrix_1.png)
 
-Figure 1
+**Figure 1**
 
 Initially, my LLM disliked the idea of using a confusion matrix. With creating the confusion matrix, we have to eliminate
 pieces of the data so the snails will fit into age categories. The matrix generated in my initial iteration of code is in a
@@ -57,7 +57,7 @@ For example, using a ratio of shucked weight to whole weight to improve our "Mid
 
 ![Figure_2](Confusion_Matrix_2.png)
 
-Figure 2
+**Figure 2**
 
 Here is the more accurate confusion matrix, however, I specified in my prompt that I would like the matrix to be in the order of young, 
 mid, and old classes so that it is easier to read. This seems to have generated three new figures and the percent accuracy of each category, 
@@ -65,7 +65,7 @@ as you can see in Figure 2 above.
 
 ![Figure_3](Regression_Model.png)
 
-Figure 3
+**Figure 3**
 
 Figure 3 shows us the regression model of the number of rings on each snail vs. how many predictions of rings
 our code got right. As we can see, our newer models are more accurate. Our confusion matrix has fewer numbers of snails in orange - incorrect
@@ -75,7 +75,7 @@ our code got right. As we can see, our newer models are more accurate. Our confu
 
 ![Figure_4](Feature_Importance.png)
 
-Figure 4
+**Figure 4**
 
 Figure 4 above shows the influence of each feature on our analysis. The higher the importance, the more influential that variable would be
 if we were to alter it. Each number corresponds to a specific feature: 
