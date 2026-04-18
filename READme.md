@@ -17,7 +17,7 @@ variance in our dataset. Overall, Random Forest proves itself to be the better m
 
 ## Deliverable 3
 
-![Confusion_Matrix_from_Iteration_1](Confusion_1.png)
+![Confusion_Matrix_from_Iteration_1](Confusion_Matrix_1.png)
 
 Initially, my LLM disliked the idea of using a confusion matrix. With creating the confusion matrix, 
 we have to eliminate pieces of the data so the snails will fit into age categories. The matrix generated 
@@ -28,4 +28,10 @@ the method predicted the wrong number. The depth of the color helps to visualize
 in each bin. 
 
 ## Deliverable 4
+
+
+
+
+
+
 
