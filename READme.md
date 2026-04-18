@@ -79,19 +79,19 @@ Figure 4
 
       Figure 4 above shows the influence of each feature on our analysis. The higher the importance, the more influential that variable would be
       if we were to alter it. Each number corresponds to a specific feature: 
-     "1 → Sex_F
-      2 → Sex_I
-      3 → Sex_M
-      4 → Length
-      5 → Diameter
-      6 → Height
-      7 → Whole weight
-      8 → Shucked weight
-      9 → Viscera weight
-      10 → Shell weight
-      11 → ratio1 = shucked weight / whole weight
-      12 → ratio2 = length / diameter
-      13 → density = whole weight / (length * diameter * height)"
+     "-1 → Sex_F
+      -2 → Sex_I
+      -3 → Sex_M
+      -4 → Length
+      -5 → Diameter
+      -6 → Height
+      -7 → Whole weight
+      -8 → Shucked weight
+      -9 → Viscera weight
+      -10 → Shell weight
+      -11 → ratio1 = shucked weight / whole weight
+      -12 → ratio2 = length / diameter
+      -13 → density = whole weight / (length * diameter * height)"
 
       The final three ratios were added in our code to make the approximations more accurate. 
 
