@@ -1,0 +1,58 @@
+clc; 
+clear all;
+
+% Load data
+data = readtable('abalone.csv');
+
+% Encode 'sex'
+data.sex = categorical(data.sex);
+sex_dummy = dummyvar(data.sex);
+data.sex = [];
+
+% Features and target
+X = [sex_dummy, table2array(data(:,1:end-1))];
+y = data.rings;
+
+% Train/test split
+cv = cvpartition(length(y), 'HoldOut', 0.2);
+
+X_train = X(training(cv), :);
+y_train = y(training(cv));
+
+X_test = X(test(cv), :);
+y_test = y(test(cv));
+
+% Train Random Forest
+rfModel = TreeBagger(100, X_train, y_train, ...
+    'Method', 'regression');
+
+% Predict
+y_pred = predict(rfModel, X_test);
+
+%% ---- Create bins (quantile-based) ----
+q1 = quantile(y_train, 1/3);
+q2 = quantile(y_train, 2/3);
+
+% Function to assign class labels
+bin_func = @(v) ...
+    (v <= q1) .* 1 + ...
+    (v > q1 & v <= q2) .* 2 + ...
+    (v > q2) .* 3;
+
+y_test_class = bin_func(y_test);
+y_pred_class = bin_func(y_pred);
+
+%% ---- Confusion Matrix ----
+confMat = confusionmat(y_test_class, y_pred_class);
+
+disp('Confusion Matrix (rows = actual, cols = predicted):');
+disp(confMat);
+
+% Plot confusion matrix
+figure;
+confusionchart(confMat, {'Young','Mid','Old'});
+title('Age Group Confusion Matrix');
+
+%% Optional: accuracy
+accuracy = sum(diag(confMat)) / sum(confMat(:));
+fprintf('Classification Accuracy: %.4f\n', accuracy);
