@@ -1,6 +1,8 @@
 ## Deliverable 1 
 
-      Initial Prompt: I would like to do a machine learning project where the goal is to predict how old a snail is based on physical measurements. I have a spreadsheet with columns ‘sex’, ‘length’, ‘diameter’, ‘height’, 'whole weight', 'shucked weight', 'viscera weight', 'shell weight', and ‘rings’. There are approximately 4177 rows. I will ask for matlab code soon, but first: Can we talk about the best way to model this data set?
+      Initial Prompt: I would like to do a machine learning project where the goal is to predict how old a snail is based on physical measurements. I have a 
+      spreadsheet with columns ‘sex’, ‘length’, ‘diameter’, ‘height’, 'whole weight', 'shucked weight', 'viscera weight', 'shell weight', and ‘rings’. There are
+      approximately 4177 rows. I will ask for matlab code soon, but first: Can we talk about the best way to model this data set?
 
 ## Deliverable 2 
 
